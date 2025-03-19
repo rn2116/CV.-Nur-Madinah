@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Home() {
   return (
     <main className="max-w-4xl mx-auto mt-4">
@@ -16,6 +17,7 @@ export default function Home() {
             <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
             <div className="card-actions justify-end">
               <button className="btn btn-primary">Buy Now</button>
+              <Link href="/Signin"> <span className="text-blue-500 hover:underline cursor-pointer">Lihat Syarat</span></Link>
             </div>
           </div>
         </div>
