@@ -24,7 +24,7 @@ export default function Signup() {
     console.log("User Data:", formData);
 
     // Arahkan ke homepage setelah berhasil sign up
-    router.push("/homepage");
+    router.push("/Homepage");
   };
 
   return (
