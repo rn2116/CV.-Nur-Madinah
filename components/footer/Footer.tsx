@@ -1,23 +1,29 @@
+import Image from "next/image";
+
 const Footer = () => {
-    return (
-      <footer className="bg-black text-white py-8">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-4">
-          {/* Info Kontak */}
-          <div>
-            <h3 className="font-bold">Palu, Sulawesi Tengah</h3>
-            <p>(+62) 87654321987</p>
-            <p>nurmadinah@gmail.com</p>
-          </div>
-  
-          {/* Tentang Perusahaan */}
-          <div className="text-right">
-            <h3 className="font-bold">CV Nur Madinah</h3>
-            <p>CV Nur Madinah adalah toko sembako yang berada di kota Palu Sulawesi Barat</p>
-          </div>
+  return (
+    <footer className="bg-black text-white py-8">
+      <div className="container mx-auto px-6 flex justify-between items-start">
+        {/* Info Kontak (Kiri) */}
+        <div>
+          <p className="text-lg">Palu, Sulawesi Tengah</p>
+          <p className="text-lg">(+62) 87654321987</p>
+          <p className="text-lg">nurmadinah@gmail.com</p>
         </div>
-      </footer>
-    );
-  };
-  
-  export default Footer;
-  
+
+        {/* Logo + Tentang Perusahaan (Kanan) */}
+        <div className="flex flex-col items-end text-right">
+          {/* Logo */}
+          <Image src="/Logomitra.jpg" alt="Logo" width={80} height={80} className="mb-2 object-contain" />
+          {/* Tentang Perusahaan */}
+          <h3 className="font-bold text-lg">CV Nur Madinah</h3>
+          <p className="text-sm max-w-xs">
+            CV Nur Madinah adalah toko sembako yang berada di kota Palu, Sulawesi Barat
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

@@ -15,11 +15,8 @@ const Navbar = () => {
           <Link href="/" className="text-gray-700 hover:text-black font-medium">
             Beranda
           </Link>
-          <Link href="/produk" className="text-gray-700 hover:text-black font-medium">
-            Produk
-          </Link>
-          <Link href="/proses-pemesanan" className="text-gray-700 hover:text-black font-medium">
-            Proses Pemesanan
+          <Link href="/pemesanan" className="text-gray-700 hover:text-black font-medium">
+            Pemesanan
           </Link>
           <Link href="/tentang-kami" className="text-gray-700 hover:text-black font-medium">
             Tentang Kami
