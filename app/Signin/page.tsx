@@ -48,11 +48,6 @@ export default function SignIn() {
           
           <button className="btn btn-black w-full mb-3" onClick={handleSignIn}>Sign In</button>
           
-          <button className="btn btn-outline w-full flex items-center">
-            <Image src="/Googlelogo.png" alt="Google" width={20} height={20} className="mr-2" />
-            Sign In With Google
-          </button>
-          
           <p className="mt-3 text-gray-600 text-sm">
             Don’t have an account? <a href="/Signup" className="text-blue-500">Sign up</a>
           </p>
@@ -60,7 +55,7 @@ export default function SignIn() {
         
         {/* Image Section */}
         <div className="w-1/2 flex items-center justify-center">
-          <Image src="/signin.png" alt="Store Illustration" width={400} height={400} />
+          <Image src="/signin.jpg" alt="Store Illustration" width={400} height={400} />
         </div>
       </div>
     </div>

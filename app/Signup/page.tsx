@@ -33,7 +33,7 @@ export default function Signup() {
         {/* Image Section */}
         <div className="w-1/2 flex items-center justify-center">
           <Image
-            src="/signup.png"
+            src="/signup.jpg"
             alt="signup"
             width={500}
             height={500}
@@ -95,11 +95,6 @@ export default function Signup() {
           </form>
           
           <div className="divider">OR</div>
-          
-          <button className="btn btn-outline w-full flex items-center">
-            <Image src="/Googlelogo.png" alt="Google" width={24} height={24} className="mr-2" />
-            Sign Up With Google
-          </button>
           
           <p className="text-center mt-4">
             Already have an account? <Link href="/Signin" className="text-blue-600">Sign in</Link>
