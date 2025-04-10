@@ -1,4 +1,5 @@
 'use client';
+import { signUp } from 'aws-amplify/auth';
 import { useRouter } from "next/navigation"; // Import useRouter
 import Image from "next/image";
 import Link from "next/link";
@@ -17,14 +18,33 @@ export default function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simpan data (contoh, nanti bisa dihubungkan ke Firebase)
-    console.log("User Data:", formData);
-
-    // Arahkan ke homepage setelah berhasil sign up
-    router.push("/Homepage");
+  
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+  
+    try {
+      const result = await signUp({
+        username: formData.email,
+        password: formData.password,
+        options: {
+          userAttributes: {
+            email: formData.email,
+            name: formData.name,
+          }
+        }
+      });
+  
+      console.log("Signup success:", result);
+      // Setelah signup sukses → arahkan ke halaman konfirmasi atau langsung login
+      router.push("/Homepage");
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      alert(error.message || "Signup failed");
+    }
   };
 
   return (
