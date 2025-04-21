@@ -2,7 +2,7 @@ import Image from "next/image";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 
-const Home = () => {
+const Homepage = () => {
   return (
     <div className="bg-white">
       {/* Navbar */}
@@ -106,4 +106,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Homepage;

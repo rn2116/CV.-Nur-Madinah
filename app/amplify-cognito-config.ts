@@ -1,21 +1,22 @@
-'use client'
+// app/amplify-cognito-config.tsx
+'use client';
 
-import { Amplify, type ResourcesConfig } from "aws-amplify";
+import { Amplify } from 'aws-amplify';
 
-export const authConfig: ResourcesConfig["Auth"] = {
-  Cognito: {
-    userPoolId: String(process.env.NEXT_PUBLIC_USER_POOL_ID),
-    userPoolClientId: String(process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID),
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolId: 'us-east-1_ZrSSW3APp',
+      userPoolClientId: '2vd10nfua1oa308ta0gm86isbr',
+      loginWith: {
+        email: true,
+      },
+    },
   },
+});
+
+const ConfigureAmplifyClientSide = () => {
+  return null;
 };
 
-Amplify.configure(
-  {
-    Auth: authConfig,
-  },
-  {ssr: true}
-);
-
-export default function ConfigureAmplifyClientSide() {
-  return null;
-}
+export default ConfigureAmplifyClientSide;
