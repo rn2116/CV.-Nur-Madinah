@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-8">
+    <footer className="bg-[#1B2A36] text-white py-8">
       <div className="container mx-auto px-6 flex justify-between items-start">
         {/* Info Kontak (Kiri) */}
         <div>
@@ -18,7 +18,7 @@ const Footer = () => {
           {/* Tentang Perusahaan */}
           <h3 className="font-bold text-lg">CV Nur Madinah</h3>
           <p className="text-sm max-w-xs">
-            CV Nur Madinah adalah toko sembako yang berada di kota Palu, Sulawesi Barat
+            CV Nur Madinah adalah toko sembako yang berada di kota Palu, Sulawesi Tengah
           </p>
         </div>
       </div>

@@ -27,7 +27,7 @@ const About = () => {
 
           {/* Deskripsi Perusahaan */}
           <div className="flex-1">
-            <p className="text-gray-700 text-justify leading-relaxed">
+            <p className="text-black text-justify leading-relaxed">
               Tentang Kami
             Selamat datang di Web CV.Nur Madinah, platform terpercaya yang menghubungkan distributor dengan konsumen untuk memenuhi kebutuhan sehari-hari dengan mudah dan efisien.
             <br /> <br />
