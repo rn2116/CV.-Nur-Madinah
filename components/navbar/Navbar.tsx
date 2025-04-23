@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { getCurrentUser, signOut } from 'aws-amplify/auth';
 import { FaUserCircle } from "react-icons/fa";
 
@@ -17,15 +18,35 @@ const Navbar = () => {
     address: "Lompo battang",
   });
 
+=======
+
+// Modular imports dari Amplify v6
+import { getCurrentUser, signOut } from 'aws-amplify/auth';
+
+const Navbar = () => {
+  const [username, setUsername] = useState<string | null>(null);
+
+  // Ambil nama user saat komponen dimount
+>>>>>>> 0407b3b632a1e340af68cbe78cae60e5a7c12d5a
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const { username } = await getCurrentUser();
         setUsername(username);
+<<<<<<< HEAD
       } catch {
         setUsername(null);
       }
     };
+=======
+        console.log("Login success as:", username);
+      } catch (error) {
+        console.log("No user logged in");
+        setUsername(null);
+      }
+    };
+
+>>>>>>> 0407b3b632a1e340af68cbe78cae60e5a7c12d5a
     fetchUser();
   }, []);
 
@@ -33,12 +54,17 @@ const Navbar = () => {
     try {
       await signOut();
       setUsername(null);
+<<<<<<< HEAD
       setShowProfile(false);
+=======
+      console.log("Logout success");
+>>>>>>> 0407b3b632a1e340af68cbe78cae60e5a7c12d5a
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
+<<<<<<< HEAD
   const toggleEdit = () => {
     setEditable(true);
   };
@@ -57,6 +83,8 @@ const Navbar = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+=======
+>>>>>>> 0407b3b632a1e340af68cbe78cae60e5a7c12d5a
   return (
     <>
       <nav className="bg-cyan-400 shadow-md">
@@ -91,6 +119,7 @@ const Navbar = () => {
         </div>
       </nav>
 
+<<<<<<< HEAD
       {/* Profile Modal */}
       {showProfile && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
@@ -170,6 +199,27 @@ const Navbar = () => {
               ×
             </button>
           </div>
+=======
+        {/* User Info / Auth Buttons */}
+        <div className="space-x-4 flex items-center">
+          {username ? (
+            <>
+              <span className="text-gray-700">Hi, {username}</span>
+              <button
+                onClick={handleLogout}
+                className="text-gray-700 px-4 py-2 border rounded hover:bg-gray-200"
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link href="/Signin">
+              <button className="text-gray-700 px-4 py-2 border rounded hover:bg-gray-200">
+                Login
+              </button>
+            </Link>
+          )}
+>>>>>>> 0407b3b632a1e340af68cbe78cae60e5a7c12d5a
         </div>
       )}
     </>
