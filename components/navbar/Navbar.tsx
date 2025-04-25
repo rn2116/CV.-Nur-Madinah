@@ -95,7 +95,7 @@ const Navbar = () => {
       {showProfile && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-96 relative">
-            <h2 className="text-xl font-bold mb-4">Profile</h2>
+            <h2 className="text-xl text-black font-bold mb-4">Profile</h2>
             <div className="flex justify-center mb-4">
               <Image src="/profile.png" alt="Profile Pic" width={80} height={80} className="rounded-full" />
             </div>

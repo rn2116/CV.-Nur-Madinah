@@ -12,7 +12,7 @@ const About = () => {
 
       {/* Konten Utama */}
       <div className="flex-grow max-w-5xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-center mb-6 text-brown-700">Tentang Kami</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 text-black">Tentang Kami</h1>
         <div className="flex flex-col md:flex-row-reverse items-center md:items-start gap-6">
           {/* Logo Perusahaan */}
           <div className="flex-1 flex justify-center">
