@@ -30,6 +30,13 @@ export default function PemesananPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/Signin"); // redirect kalau belum login
+    }
+  }, []);
+
+  useEffect(() => {
     const savedOrders = JSON.parse(localStorage.getItem("selectedOrders") || "[]") as Order[];
 
 
@@ -140,8 +147,16 @@ export default function PemesananPage() {
 
     console.log("📦 Payload dikirim:", payload);
 
-    try {
-  const res = await axios.post("http://localhost:8000/api/pesanan", payload);
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.post("http://localhost:8000/api/pesanan", payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+    
   console.log("✅ Respons dari backend:", res.data);
 
   const createdNota = res.data.pesanan; // sesuaikan nama field dengan backend
@@ -208,20 +223,21 @@ export default function PemesananPage() {
           {/* Tombol aksi */}
           <div className="flex flex-col gap-4 md:items-end w-full md:w-auto mt-4 md:mt-0">
             <a
-              href="https://wa.me/6287654321987"
+              href="https://wa.me/62895341610373"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded flex items-center gap-2"
+              className="h-12 w-48 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 rounded flex items-center justify-center gap-2"
             >
-              Hubungi Admin <FaWhatsapp size={20} />
+              Hubungi Admin <FaWhatsapp className="w-4 h-4" />
             </a>
+
             <button
               onClick={handleSubmit}
-              className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2 rounded flex items-center gap-2"
+              className="h-12 w-48 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 rounded flex items-center justify-center gap-2"
             >
-              Kirim Pesanan <FaPaperPlane size={18} />
+              Kirim Pesanan <FaPaperPlane className="w-4 h-4" />
             </button>
-          </div>
+          </div>
         </div>
 
         <h1 className="text-2xl font-bold mb-4">Daftar Pesanan</h1>

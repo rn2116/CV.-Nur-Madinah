@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
+
 
 type OrderItem = {
   id: number;
@@ -28,29 +31,41 @@ export default function NotaPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+  if (!id) return;
 
-    axios
-      .get(`http://localhost:8000/api/pesanan/${id}`)
-      .then((res) => {
-        const data: Pesanan = res.data;
-        setPesanan(data);
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("Token tidak ditemukan, redirect ke login");
+    return;
+  }
 
-        try {
-          const ordersParsed: OrderItem[] = JSON.parse(data.orders);
-          setOrders(ordersParsed);
-        } catch (error) {
-          console.error("Gagal parsing orders:", error);
-          setOrders([]);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetch pesanan:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [id]);
+  axios
+    .get(`http://localhost:8000/api/pesanan/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+    .then((res) => {
+      const data: Pesanan = res.data;
+      setPesanan(data);
+
+      try {
+        const ordersParsed: OrderItem[] = JSON.parse(data.orders);
+        setOrders(ordersParsed);
+      } catch (error) {
+        console.error("Gagal parsing orders:", error);
+        setOrders([]);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetch pesanan:", err);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, [id]);
+
 
   if (loading) return <p className="text-center py-10">Loading...</p>;
   if (!pesanan) return <p className="text-center py-10">Pesanan tidak ditemukan</p>;
@@ -61,40 +76,46 @@ export default function NotaPage() {
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="bg-white shadow rounded-xl p-6">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-4">
-          Nota Pesanan #{pesanan.id}
-        </h1>
+    <div className="bg-white min-h-screen flex flex-col text-black">
+      <Navbar />
 
-        <div className="grid gap-1 text-sm text-gray-700 mb-6">
-          <p><span className="font-medium">Nama Toko:</span> {pesanan.nama_toko}</p>
-          <p><span className="font-medium">Alamat:</span> {pesanan.alamat}</p>
-          <p><span className="font-medium">No. HP:</span> {pesanan.no_hp}</p>
+      <main className="container mx-auto px-6 py-8 flex-grow">
+        <h1 className="text-3xl font-bold mb-6">Nota Pesanan #{pesanan.id}</h1>
+
+        <div className="grid gap-3 mb-8 text-sm">
+          <p>
+            <span className="font-semibold">Nama Toko:</span> {pesanan.nama_toko}
+          </p>
+          <p>
+            <span className="font-semibold">Alamat:</span> {pesanan.alamat}
+          </p>
+          <p>
+            <span className="font-semibold">No. HP:</span> {pesanan.no_hp}
+          </p>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300 rounded-lg">
-            <thead className="bg-gray-100 text-sm text-gray-600">
+        <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-sm">
+          <table className="w-full text-sm text-left text-gray-700">
+            <thead className="bg-gray-100">
               <tr>
-                <th className="border px-3 py-2 text-left">Nama Barang</th>
-                <th className="border px-3 py-2 text-right">Harga</th>
-                <th className="border px-3 py-2 text-center">Jumlah</th>
-                <th className="border px-3 py-2 text-center">Satuan</th>
-                <th className="border px-3 py-2 text-right">Subtotal</th>
+                <th className="px-4 py-2 border">Nama Barang</th>
+                <th className="px-4 py-2 border text-right">Harga</th>
+                <th className="px-4 py-2 border text-center">Jumlah</th>
+                <th className="px-4 py-2 border text-center">Satuan</th>
+                <th className="px-4 py-2 border text-right">Subtotal</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((item) => (
-                <tr key={item.id} className="text-sm">
-                  <td className="border px-3 py-2">{item.name}</td>
-                  <td className="border px-3 py-2 text-right">
-                    Rp {item.price.toLocaleString()}
+                <tr key={item.id} className="border-b last:border-0">
+                  <td className="px-4 py-2 border-r">{item.name}</td>
+                  <td className="px-4 py-2 border-r text-right">
+                    Rp {item.price.toLocaleString("id-ID")}
                   </td>
-                  <td className="border px-3 py-2 text-center">{item.quantity}</td>
-                  <td className="border px-3 py-2 text-center">{item.unit}</td>
-                  <td className="border px-3 py-2 text-right">
-                    Rp {(item.price * item.quantity).toLocaleString()}
+                  <td className="px-4 py-2 border-r text-center">{item.quantity}</td>
+                  <td className="px-4 py-2 border-r text-center">{item.unit}</td>
+                  <td className="px-4 py-2 text-right">
+                    Rp {(item.price * item.quantity).toLocaleString("id-ID")}
                   </td>
                 </tr>
               ))}
@@ -102,10 +123,12 @@ export default function NotaPage() {
           </table>
         </div>
 
-        <div className="mt-4 text-right text-lg font-semibold text-gray-800">
-          Total: Rp {totalHarga.toLocaleString()}
+        <div className="mt-6 text-right text-xl font-semibold">
+          Total: Rp {totalHarga.toLocaleString("id-ID")}
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

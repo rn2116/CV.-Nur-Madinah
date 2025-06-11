@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
+import axios from 'axios';
 
 interface Barang {
   id: number;
@@ -24,8 +25,13 @@ const Homepage = () => {
   useEffect(() => {
     const fetchBarang = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/barang");
-        const data = await res.json();
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:8000/api/barang", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+        const data = res.data;
         setBarangs(data);
       } catch (error) {
         console.error("Gagal mengambil data barang:", error);
@@ -93,19 +99,23 @@ const Homepage = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-[url('/latar.jpg')] bg-cover bg-center h-[450px]">
-        <div className="container mx-auto px-6 md:px-12 h-full flex items-center relative z-10">
-          <div className="max-w-xl text-white">
-            <h1 className="text-xl md:text-2xl font-semibold leading-snug">
-              Kami Menjual Berbagai Sembako Kebutuhan sehari-hari untuk anda,
-              Belanja lebih mudah tanpa keluar rumah
-            </h1>
-            <button className="mt-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition">
-              Belanja Sekarang
-            </button>
-          </div>
-        </div>
-      </section>
+<section className="relative bg-[url('/latar.jpg')] bg-cover bg-center h-[450px]">
+  {/* Overlay transparan */}
+  <div className="absolute inset-0 bg-black/40 z-0" />
+
+  <div className="container mx-auto px-6 md:px-12 h-full flex items-center relative z-10">
+    <div className="p-6 rounded-lg max-w-xl text-white">
+      
+      {/* Shape khusus untuk teks */}
+      <div className="bg-gray-900/90 p-4 rounded mb-4">
+        <h1 className="text-xl md:text-2xl font-semibold leading-snug">
+          Kami Menjual Berbagai Sembako Kebutuhan sehari-hari untuk anda,
+          Belanja lebih mudah tanpa keluar rumah, Mari Belanja Sekarang !!!
+        </h1>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Produk List */}
       <section className="container mx-auto py-16 text-center">

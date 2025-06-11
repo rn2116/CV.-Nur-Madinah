@@ -1,18 +1,18 @@
 'use client';
-import { signUp } from 'aws-amplify/auth';
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Signup() {
-  const router = useRouter(); // Gunakan useRouter
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,30 +20,46 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      alert("Password tidak cocok.");
       return;
     }
-  
+
+    setIsLoading(true);
     try {
-      const result = await signUp({
-        username: formData.email,
-        password: formData.password,
-        options: {
-          userAttributes: {
-            email: formData.email,
-            name: formData.name,
-          }
-        }
+      const response = await fetch("http://localhost:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        }),
       });
-  
-      console.log("Signup success:", result);
-      // Setelah signup sukses → arahkan ke halaman konfirmasi atau langsung login
-      router.push("/Homepage");
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMessage = data.message || "Pendaftaran gagal.";
+        throw new Error(errorMessage);
+      }
+
+      console.log("Register success:", data);
+
+      // Simpan token ke localStorage (opsional)
+      localStorage.setItem("token", data.token);
+
+      alert("Pendaftaran berhasil! Silakan login.");
+      router.push("/Signin");
     } catch (error: any) {
-      console.error("Signup error:", error);
-      alert(error.message || "Signup failed");
+      console.error("Register error:", error);
+      alert(error.message || "Terjadi kesalahan saat mendaftar.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,18 +111,12 @@ export default function Signup() {
 
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-black text-white py-2 rounded-md hover:opacity-90 transition"
           >
-            Buat Akun
+            {isLoading ? "Mendaftarkan..." : "Buat Akun"}
           </button>
         </form>
-
-        <div className="my-4">
-          <button className="w-full border flex items-center text-black justify-center py-2 rounded-md hover:bg-gray-100 transition">
-            <Image src="/Googlelogo.png" alt="Google" width={20} height={20} className="mr-2" />
-            <span>Daftar dengan akun Google</span>
-          </button>
-        </div>
 
         <p className="text-center text-sm mt-4 text-black">
           Sudah Punya akun?{' '}
@@ -115,6 +125,6 @@ export default function Signup() {
           </Link>
         </p>
       </div>
-    </div>
-  );
+    </div>
+  );
 }

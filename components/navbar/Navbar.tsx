@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getCurrentUser, signOut } from 'aws-amplify/auth';
 import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
@@ -11,47 +10,48 @@ const Navbar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [editable, setEditable] = useState(false);
   const [formData, setFormData] = useState({
-    username: "Smith",
-    email: "smith@mail.com",
-    phone: "081432344323443",
-    address: "Lompo battang",
+    username: "",
+    email: "",
+    phone: "",
+    address: "",
   });
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { username } = await getCurrentUser();
-        setUsername(username);
-      } catch {
+        const res = await fetch("http://localhost:8000/api/user", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        if (!res.ok) throw new Error("Not authenticated");
+
+        const data = await res.json();
+        setUsername(data.name || data.username);
+        setFormData({
+          username: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+        });
+      } catch (error) {
         setUsername(null);
       }
     };
+
     fetchUser();
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await signOut();
-      setUsername(null);
-      setShowProfile(false);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    localStorage.removeItem("token");
+    setUsername(null);
+    setShowProfile(false);
+    window.location.href = "/Signin";
   };
 
-  const toggleEdit = () => {
-    setEditable(true);
-  };
-
-  const cancelEdit = () => {
-    setEditable(false);
-    setFormData({
-      username: "Smith",
-      email: "smith@mail.com",
-      phone: "081432344323443",
-      address: "Lompo battang",
-    });
-  };
+  const toggleEdit = () => setEditable(true);
+  const cancelEdit = () => setEditable(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -61,7 +61,6 @@ const Navbar = () => {
     <>
       <nav className="bg-cyan-400 shadow-md">
         <div className="container mx-auto flex justify-between items-center py-4 px-6">
-          {/* Logo + Nav Links */}
           <div className="flex items-center space-x-10">
             <Image src="/Logomitra.jpg" alt="Logo" width={100} height={100} />
             <div className="flex space-x-6">
@@ -71,7 +70,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Auth Info */}
           <div className="flex items-center space-x-4">
             {username ? (
               <>
@@ -91,7 +89,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Profile Modal */}
       {showProfile && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-96 relative">
@@ -147,7 +144,14 @@ const Navbar = () => {
               </div>
             </form>
 
-            {/* Action buttons */}
+            {/* Link ke Riwayat Pesanan */}
+            <Link
+              href="/Riwayat"
+              className="block w-full text-center mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Lihat Riwayat Pesanan
+            </Link>
+
             <div className="flex justify-end space-x-2 mt-4">
               {!editable ? (
                 <>
@@ -162,7 +166,6 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Close Button */}
             <button
               onClick={() => { setShowProfile(false); setEditable(false); }}
               className="absolute top-2 right-3 text-gray-500 text-xl font-bold hover:text-black"

@@ -1,48 +1,32 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'aws-amplify/auth';
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export default function SignIn() {
+export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleSignIn(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError('');
 
-    try {
-      const result = await signIn({ username: email, password });
-      console.log('Login success:', result);
+    const res = await fetch('http://localhost:8000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (result.isSignedIn) {
-        // ✅ Jika user sudah terverifikasi
-        router.push('/Homepage');
-      } else if (result.nextStep?.signInStep === 'CONFIRM_SIGN_UP') {
-        // ⚠️ Jika user belum verifikasi email
-        setError('Akun Anda belum diverifikasi. Silakan verifikasi terlebih dahulu.');
-        router.push(`/verify?email=${encodeURIComponent(email)}`);
-      } else {
-        setError('Login berhasil tapi memerlukan langkah tambahan.');
-      }
-    } catch (err: any) {
-      console.error('Login failed:', err);
-
-      if (err.name === 'UserNotFoundException') {
-        setError('Akun tidak ditemukan. Silakan daftar terlebih dahulu.');
-      } else if (err.name === 'NotAuthorizedException') {
-        setError('Password salah atau akun belum dikonfirmasi.');
-      } else if (err.name === 'UserNotConfirmedException') {
-        setError('Akun Anda belum terverifikasi. Periksa email Anda.');
-        router.push(`/verify?email=${encodeURIComponent(email)}`);
-      } else {
-        setError(err.message || 'Gagal login. Silakan coba lagi.');
-      }
+    if (res.ok) {
+      const data = await res.json();
+      setError(null);
+      localStorage.setItem('token', data.token);
+      router.push('/Homepage');
+    } else {
+      setError('Login gagal, cek email dan password');
     }
   }
 
@@ -92,14 +76,9 @@ export default function SignIn() {
 
           <button
             className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition mb-3"
-            onClick={handleSignIn}
+            onClick={handleSubmit}
           >
             Sign In
-          </button>
-
-          <button className="w-full bg-white border border-gray-300 py-2 rounded-lg text-black flex items-center justify-center gap-2 text-sm hover:bg-gray-100 mb-4">
-            <Image src="/Googlelogo.png" alt="Google" width={20} height={20} />
-            Login Dengan Google
           </button>
 
           <p className="text-center text-sm text-gray-600">
