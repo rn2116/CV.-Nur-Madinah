@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
+import { useRouter } from 'next/navigation';
 
 
 type OrderItem = {
@@ -25,6 +26,7 @@ type Pesanan = {
 
 export default function NotaPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id;
   const [pesanan, setPesanan] = useState<Pesanan | null>(null);
   const [orders, setOrders] = useState<OrderItem[]>([]);
@@ -34,10 +36,9 @@ export default function NotaPage() {
   if (!id) return;
 
   const token = localStorage.getItem("token");
-  if (!token) {
-    console.warn("Token tidak ditemukan, redirect ke login");
-    return;
-  }
+    if (!token) {
+      router.push("/Signin"); // redirect kalau belum login
+    }
 
   axios
     .get(`http://localhost:8000/api/pesanan/${id}`, {

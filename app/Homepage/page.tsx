@@ -6,6 +6,8 @@ import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
 import axios from 'axios';
+import { Autocomplete, TextField } from "@mui/material";
+
 
 interface Barang {
   id: number;
@@ -18,6 +20,7 @@ interface Barang {
 
 
 const Homepage = () => {
+  const [searchValue, setSearchValue] = useState<Barang | null>(null);
   const [barangs, setBarangs] = useState<Barang[]>([]);
   const [selectedBarang, setSelectedBarang] = useState<Barang[]>([]);
   const router = useRouter();
@@ -26,6 +29,9 @@ const Homepage = () => {
     const fetchBarang = async () => {
       try {
         const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/Signin"); // redirect kalau belum login
+    }
         const res = await axios.get("http://localhost:8000/api/barang", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -82,21 +88,7 @@ const Homepage = () => {
         <Navbar />
       </div>
 
-      {/* Search Bar */}
-      <div className="relative z-20 container mx-auto px-6 mt-8 mb-6">
-        <div className="flex justify-start">
-          <div className="relative w-full max-w-xl">
-            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black text-xl">
-              🔍
-            </span>
-            <input
-              type="text"
-              placeholder="Pencarian Sembako"
-              className="w-full pl-10 pr-4 py-3 rounded-md border border-gray-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-gray-500"
-            />
-          </div>
-        </div>
-      </div>
+      
 
       {/* Hero Section */}
 <section className="relative bg-[url('/latar.jpg')] bg-cover bg-center h-[450px]">
@@ -120,8 +112,37 @@ const Homepage = () => {
       {/* Produk List */}
       <section className="container mx-auto py-16 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Sembako</h2>
+{/* Search Bar */}
+      <div className="relative z-20 container mx-auto px-6 mt-8 mb-6">
+        <div className="flex justify-start">
+          <div className="relative w-full max-w-xl">
+            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black text-xl">
+              🔍
+            </span>
+            <Autocomplete
+                options={barangs}
+                getOptionLabel={(option) => option.name}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                onChange={(event, newValue) => {
+                  setSearchValue(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Cari Sembako"
+                    variant="outlined"
+                    sx={{ backgroundColor: "white" }}
+                  />
+                )}
+              />
+          </div>
+        </div>
+      </div>
+
         <div className="grid md:grid-cols-4 gap-6">
-          {barangs.map((item) => {
+          {barangs
+          .filter((item) => searchValue ? item.id === searchValue.id : true)
+          .map((item) => {
             const isSelected = selectedBarang.find((b) => b.id === item.id);
             return (
               <div

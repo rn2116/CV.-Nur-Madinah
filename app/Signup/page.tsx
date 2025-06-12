@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Snackbar, Alert } from "@mui/material";
 
 export default function Signup() {
   const router = useRouter();
@@ -14,6 +15,16 @@ export default function Signup() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+
+  const showSnackbar = (message: string, severity: "success" | "error") => {
+  setSnackbarMessage(message);
+  setSnackbarSeverity(severity);
+  setSnackbarOpen(true);
+};
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,7 +33,7 @@ export default function Signup() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Password tidak cocok.");
+      showSnackbar("Password tidak cocok.", "error"); 
       return;
     }
 
@@ -53,11 +64,11 @@ export default function Signup() {
       // Simpan token ke localStorage (opsional)
       localStorage.setItem("token", data.token);
 
-      alert("Pendaftaran berhasil! Silakan login.");
-      router.push("/Signin");
+      showSnackbar("Pendaftaran berhasil! Silakan login.", "success"); // ✅ Ganti alert
+      setTimeout(() => router.push("/Signin"), 1500); // Delay agar pesan bisa muncul dulu
     } catch (error: any) {
       console.error("Register error:", error);
-      alert(error.message || "Terjadi kesalahan saat mendaftar.");
+       showSnackbar(error.message || "Terjadi kesalahan saat mendaftar.", "error"); // ✅ Ganti alert
     } finally {
       setIsLoading(false);
     }
@@ -124,6 +135,22 @@ export default function Signup() {
             Login
           </Link>
         </p>
+        
+         {/* ✅ Snackbar ditambahkan di sini */}
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={4000}
+      onClose={() => setSnackbarOpen(false)}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert
+        onClose={() => setSnackbarOpen(false)}
+        severity={snackbarSeverity}
+        sx={{ width: '100%' }}
+      >
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
       </div>
     </div>
   );

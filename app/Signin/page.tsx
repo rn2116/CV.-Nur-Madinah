@@ -39,8 +39,6 @@ export default function LoginPage() {
         className="absolute inset-0 w-full h-full object-cover z-0"
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60 z-10" />
 
       {/* Login Card */}
       <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -70,12 +68,8 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <div className="text-right text-sm text-blue-500 mb-4">
-            <a href="#">Lupa Sandi?</a>
-          </div>
-
           <button
-            className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition mb-3"
+            className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition mb-3 mt-4"
             onClick={handleSubmit}
           >
             Sign In

@@ -269,22 +269,22 @@ export default function PemesananPage() {
 
               <div className="flex items-center gap-4">
                 <span className="text-lg font-medium">Jumlah</span>
-                <button
-                  className="px-2 py-1 bg-gray-200 rounded text-black"
-                  onClick={() => updateQuantity(order.item_id, 1)}
-                >
-                  +
-                </button>
-                <span className="px-4 py-2 bg-gray-400 text-white rounded">
-                  {order.quantity}
-                </span>
-                <button
-                  className="px-2 py-1 bg-gray-200 rounded text-black"
-                  onClick={() => updateQuantity(order.item_id, -1)}
-                  disabled={order.quantity <= 1}
-                >
-                  -
-                </button>
+                  <button
+                    className="px-2 py-1 bg-gray-200 rounded text-black"
+                    onClick={() => updateQuantity(order.item_id, -1)}
+                    disabled={order.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-2 bg-gray-400 text-white rounded">
+                    {order.quantity}
+                  </span>
+                  <button
+                    className="px-2 py-1 bg-gray-200 rounded text-black"
+                    onClick={() => updateQuantity(order.item_id, 1)}
+                  >
+                   +
+                  </button>
 
                 <select
                   className="border rounded px-2 py-1"

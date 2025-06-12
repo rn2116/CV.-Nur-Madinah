@@ -62,7 +62,9 @@ export default function RiwayatPesananPage() {
 
   const handleLihatDetail = async (id: number) => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      router.push("/Signin"); // redirect kalau belum login
+    }
 
     try {
       const res = await axios.get(`http://localhost:8000/api/pesanan/${id}`, {
