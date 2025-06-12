@@ -150,7 +150,7 @@ export default function PemesananPage() {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await axios.post("http://localhost:8000/api/pesanan", payload, {
+    const res = await axios.post("http://54.90.134.63:8000/api/pesanan", payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -252,7 +252,7 @@ export default function PemesananPage() {
                 <Image
                   src={
                     order.image
-                      ? `http://localhost:8000/${order.image}`
+                      ? `http://54.90.134.63:8000/${order.image}`
                       : "/default.jpg"
                   }
                   alt={order.name}

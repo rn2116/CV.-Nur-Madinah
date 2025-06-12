@@ -44,7 +44,7 @@ export default function RiwayatPesananPage() {
 
     setIsLoggedIn(true);
 
-    axios.get('http://localhost:8000/api/pesanan/me', {
+    axios.get('http://54.90.134.63:8000/api/pesanan/me', {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -67,7 +67,7 @@ export default function RiwayatPesananPage() {
     }
 
     try {
-      const res = await axios.get(`http://localhost:8000/api/pesanan/${id}`, {
+      const res = await axios.get(`http://54.90.134.63:8000/api/pesanan/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }

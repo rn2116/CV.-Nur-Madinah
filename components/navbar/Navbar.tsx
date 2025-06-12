@@ -19,7 +19,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/user", {
+        const res = await fetch("http://54.90.134.63:8000/api/user", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }

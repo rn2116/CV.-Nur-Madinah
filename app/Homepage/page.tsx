@@ -32,7 +32,7 @@ const Homepage = () => {
     if (!token) {
       router.push("/Signin"); // redirect kalau belum login
     }
-        const res = await axios.get("http://localhost:8000/api/barang", {
+        const res = await axios.get("http://54.90.134.63:8000/api/barang", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

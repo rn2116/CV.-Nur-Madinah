@@ -39,7 +39,7 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/api/register", {
+      const response = await fetch("http://54.90.134.63:8000/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -41,7 +41,7 @@ export default function NotaPage() {
     }
 
   axios
-    .get(`http://localhost:8000/api/pesanan/${id}`, {
+    .get(`http://54.90.134.63:8000/api/pesanan/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
